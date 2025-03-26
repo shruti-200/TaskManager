@@ -1,0 +1,67 @@
+{% extends '_partials/base.html' %}
+
+{% block title %}
+<title>About Us - Task Manager</title>
+{% endblock %}
+
+{% load static %}
+
+{% block body %}
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-primary">About Us</h1>
+        <p class="text-muted">Learn more about our mission, vision, and values at Task Manager.</p>
+    </div>
+    
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h2 class="fw-semibold text-dark">Our Mission</h2>
+            <p class="text-muted">At Task Manager, we strive to provide a seamless and efficient task management experience, helping individuals and teams stay organized and productive.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'images/mission.jpeg' %}" class="img-fluid rounded shadow" alt="Our Mission">
+        </div>
+    </div>
+    
+    <div class="row align-items-center mb-5 flex-md-row-reverse">
+        <div class="col-md-6">
+            <h2 class="fw-semibold text-dark">Our Vision</h2>
+            <p class="text-muted">We aim to become the leading task management platform by continuously innovating and providing the best user experience.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'images/vision.jpeg' %}" class="img-fluid rounded shadow" alt="Our Vision">
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <h2 class="fw-semibold text-dark">Our Core Values</h2>
+        <p class="text-muted">We believe in efficiency, transparency, and innovation to empower our users.</p>
+    </div>
+    
+    <div class="row mt-4 text-center">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4">
+                <i class="bi bi-lightbulb text-primary display-4"></i>
+                <h5 class="fw-bold mt-3">Innovation</h5>
+                <p class="text-muted">Constantly improving and adapting to new challenges.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4">
+                <i class="bi bi-people text-primary display-4"></i>
+                <h5 class="fw-bold mt-3">Collaboration</h5>
+                <p class="text-muted">Fostering teamwork and efficiency in task management.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4">
+                <i class="bi bi-check2-circle text-primary display-4"></i>
+                <h5 class="fw-bold mt-3">Accountability</h5>
+                <p class="text-muted">Ensuring transparency and responsibility in all tasks.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
