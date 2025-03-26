@@ -14,10 +14,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link text-secondary fw-semibold">Home</a></li>
+        {% if user.is_authenticated %}
         <li class="nav-item"><a href="{% url 'task' %}" class="nav-link text-secondary fw-semibold">Task</a></li>
         <li class="nav-item"><a href="{% url 'review' %}" class="nav-link text-secondary fw-semibold">Review</a></li>
         <li class="nav-item"><a href="{% url 'history' %}" class="nav-link text-secondary fw-semibold">History</a></li>
-        {% if user.is_authenticated %}
         {% endif %}
         <li class="nav-item"><a href="{% url 'aboutus' %}" class="nav-link text-secondary fw-semibold">About Us</a></li>
       </ul>

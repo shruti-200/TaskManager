@@ -10,6 +10,7 @@ class Task(models.Model):
         ('In-Progress', 'In-Progress'),
         ('Review', 'Review'),
         ('Completed', 'Completed'),
+        ("Cancelled", "Cancelled"),
     ]
 
     name = models.CharField(max_length=255)

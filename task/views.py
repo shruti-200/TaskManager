@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods, require_safe
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import json
 from django.http import JsonResponse
 from django.conf.urls import handler500
@@ -70,7 +71,11 @@ def register_user(request):
 
 @require_safe
 def task(request):
-    tasks = Task.objects.all()
+    if request.user.is_superuser:
+        tasks = Task.objects.filter(status__in=["To-Do", "In-Progress"])  
+    else:
+        tasks = Task.objects.filter(assigned_to=request.user, status__in=["To-Do", "In-Progress"])
+
     return render(request, 'task.html', {"tasks": tasks})
 
 def task_form_add_update(request, id=0):
@@ -89,6 +94,12 @@ def task_form_add_update(request, id=0):
                 task = Task.objects.get(id=id)
                 m_form = TaskForm(request.POST, instance=task)
             if m_form.is_valid():
+                new_status = request.POST.get("status")
+                task = Task.objects.get(id=m_form.instance.id)
+                task_status = task.status
+                if new_status == "Completed" and task_status != "Review":
+                    messages.error(request, "You can only mark a task as 'Completed' after it has been reviewed.")
+                    return redirect("task")
                 m_form.save()
             else:
                 for field in m_form.errors:
@@ -99,16 +110,33 @@ def task_form_add_update(request, id=0):
     except Exception:
         return redirect(handler500)
 
-def delete_task(request, id=0):
-    task = Task.objects.get(id=id)
-    task.delete()
+@login_required
+def delete_task(request, id):
+    task = get_object_or_404(Task, id=id)
+    
+    if request.user.is_superuser or task.assigned_to == request.user:
+        task.delete()
+        messages.success(request, "Task deleted successfully.")
+    else:
+        messages.error(request, "You do not have permission to delete this task.")
+
     return redirect('task')
 
 
+@login_required
 def review(request):
-    tasks = Task.objects.all()
+    if request.user.is_superuser:
+        tasks = Task.objects.filter(status="Review")  
+    else:
+        tasks = Task.objects.filter(assigned_to=request.user, status="Review") 
+
     return render(request, 'review.html', {"tasks": tasks})
 
+@login_required
 def history(request):
-    tasks = Task.objects.all()
+    if request.user.is_superuser:
+        tasks = Task.objects.filter(status__in=["Completed", "Cancelled"]) 
+    else:
+        tasks = Task.objects.filter(assigned_to=request.user, status__in=["Completed", "Cancelled"])
+
     return render(request, 'history.html', {"tasks": tasks})
