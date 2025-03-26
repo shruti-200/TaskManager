@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import *
+from .models import Task
 
 
 class SignUpForm(forms.ModelForm):
@@ -32,3 +32,19 @@ class UserEditForm(forms.ModelForm):
             "email": "Email Id",
         }
 
+
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ("name", "description", "assigned_to", "status", "due_date")
+        labels = {
+            "name": "Task Name",
+            "description": "Task Description",
+            "assigned_to": "Assigned To",
+            "status": "Status",
+            "due_date": "Due Date",
+        }
+        widgets = {
+            "due_date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "status": forms.Select(attrs={"class": "form-control"}),
+        }

@@ -8,8 +8,9 @@ import json
 from django.http import JsonResponse
 from django.conf.urls import handler500
 from django.db import transaction
-from .forms import SignUpForm, UserEditForm
+from .forms import SignUpForm, UserEditForm, TaskForm
 from django.contrib.auth.models import User
+from .models import Task
 
 # Create your views here.
 @require_safe
@@ -66,21 +67,48 @@ def register_user(request):
         return redirect(handler500)
     
 
-@login_required
-def user_details(request):
+
+@require_safe
+def task(request):
+    tasks = Task.objects.all()
+    return render(request, 'task.html', {"tasks": tasks})
+
+def task_form_add_update(request, id=0):
     try:
-        if request.user.is_authenticated:
-            if request.method == "POST":
-                user_form = UserEditForm(request.POST, instance=request.user)
-                if user_form.is_valid():
-                    user_form.save()
-                    return redirect('user_details')
-                else:
-                    for field in user_form.errors:
-                        user_form[field].field.widget.attrs['class'] += ' error'
-                    return render(request, 'user_details.html', {"u_form": user_form})
+        if request.method == 'GET':
+            if id == 0:
+                m_form = TaskForm()
             else:
-                user_form = UserEditForm(instance=request.user)
-            return render(request, 'user_details.html', {"u_form": user_form})
+                task = Task.objects.get(id=id)
+                m_form = TaskForm(instance=task)
+            return render(request, 'task_form.html', {'m_form': m_form})
+        if request.method == 'POST':
+            if id==0:
+                m_form = TaskForm(request.POST, request.FILES)
+            else:
+                task = Task.objects.get(id=id)
+                m_form = TaskForm(request.POST, instance=task)
+            if m_form.is_valid():
+                m_form.save()
+            else:
+                for field in m_form.errors:
+                    m_form[field].field.widget.attrs['class'] += ' error'
+                return render(request, 'task_form.html', {'m_form': m_form})
+            return redirect('task')
+        return render(request, 'task.html')
     except Exception:
         return redirect(handler500)
+
+def delete_task(request, id=0):
+    task = Task.objects.get(id=id)
+    task.delete()
+    return redirect('task')
+
+
+def review(request):
+    tasks = Task.objects.all()
+    return render(request, 'review.html', {"tasks": tasks})
+
+def history(request):
+    tasks = Task.objects.all()
+    return render(request, 'history.html', {"tasks": tasks})

@@ -14,10 +14,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link text-secondary fw-semibold">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-secondary fw-semibold">Task</a></li>
+        <li class="nav-item"><a href="{% url 'task' %}" class="nav-link text-secondary fw-semibold">Task</a></li>
+        <li class="nav-item"><a href="{% url 'review' %}" class="nav-link text-secondary fw-semibold">Review</a></li>
+        <li class="nav-item"><a href="{% url 'history' %}" class="nav-link text-secondary fw-semibold">History</a></li>
         {% if user.is_authenticated %}
-          <li class="nav-item"><a href="#" class="nav-link text-secondary fw-semibold">Orders</a></li>
-          <li class="nav-item"><a href="#" class="nav-link text-secondary fw-semibold">History</a></li>
         {% endif %}
         <li class="nav-item"><a href="{% url 'aboutus' %}" class="nav-link text-secondary fw-semibold">About Us</a></li>
       </ul>
@@ -28,8 +28,6 @@
             <span class="fw-semibold text-dark">{{ user.username }}</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item py-2" href="#">View Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item py-2 text-danger" href="{% url 'logout' %}">Logout</a></li>
         </ul>
     </div>
